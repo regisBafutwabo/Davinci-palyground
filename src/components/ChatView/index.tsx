@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 
 import Image from 'next/image';
+import ReactLoading from 'react-loading';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ChatClient } from '@/services/Chat';
@@ -23,6 +24,7 @@ export const ChatView = () => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [chat, setChat] = useState<ChatDto>(chatOnInitialize);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const updateChatWithApiReply = async (localChat: ChatDto) => {
     const chatApiBaseUrl = process.env.NEXT_PUBLIC_API_CLIENT;
@@ -41,15 +43,22 @@ export const ChatView = () => {
   };
 
   const handleSendPress = async (message: string) => {
-    const newMessage: ChatMessageDto = {
-      authorName: 'me',
-      createdAt: Date.now(),
-      id: crypto.randomUUID(),
-      content: message,
-    };
+    try {
+      setLoading(true);
+      const newMessage: ChatMessageDto = {
+        authorName: 'me',
+        createdAt: Date.now(),
+        id: crypto.randomUUID(),
+        content: message,
+      };
 
-    const newChat = chatAfterPressSend(newMessage);
-    await updateChatWithApiReply(newChat);
+      const newChat = chatAfterPressSend(newMessage);
+      await updateChatWithApiReply(newChat);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('Error:', error);
+    }
   };
 
   return (
@@ -65,20 +74,23 @@ export const ChatView = () => {
           />
         ))}
       </div>
-      <div className="bottom-0 rounded border-2 border-[#3b3b3b] bg-[#3b3b3b] w-full fixed z-10 max-w-[696px] flex items-start ">
-        <textarea
-          rows={2}
-          placeholder="type your message here..."
-          className="rounded p-4 w-[660px] :focus-visble outline-none resize-none"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button
-          className={`py-3 px-2 ${message !== '' ? 'block' : 'hidden'}`}
-          onClick={() => handleSendPress(message)}
-        >
-          <Image src="/send.png" alt="send" width={32} height={32} />
-        </button>
+      <div className="w-full fixed z-10 max-w-[696px] flex flex-col bottom-0">
+        {loading && <ReactLoading type="bubbles" />}
+        <div className="bg-[#3b3b3b] flex items-start rounded border-2 border-[#3b3b3b]">
+          <textarea
+            rows={2}
+            placeholder="type your message here..."
+            className="rounded p-4 w-[660px] :focus-visble outline-none resize-none"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button
+            className={`py-3 px-2 ${message !== '' ? 'block' : 'hidden'}`}
+            onClick={() => handleSendPress(message)}
+          >
+            <Image src="/send.png" alt="send" width={32} height={32} />
+          </button>
+        </div>
       </div>
       <div ref={bottomRef} className="pb-[300px]" />
     </div>
