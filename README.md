@@ -1,5 +1,7 @@
-This is a chat app that is using chat-gpt completion API to reply to all your issues. Enjoy!
+This is a chat app that is using an OpenAI model(davinci-003) to reply to all your questions. Enjoy!
 
-## Current Assistant type
+## Current Playground:
 
 - [x] Therapist
+- [ ] Translator
+- [ ] PT
