@@ -5,12 +5,12 @@ export const Message = (props: MessageProps) => {
   return (
     <div
       className={`w-full flex ${
-        authorName === 'Therapist' ? 'justify-start' : 'justify-end'
+        authorName === 'assistant' ? 'justify-start' : 'justify-end'
       }`}
     >
       <div
         className={`${
-          authorName === 'Therapist' ? 'bg-purple-600' : 'bg-gray-500'
+          authorName === 'assistant' ? 'bg-purple-600' : 'bg-gray-500'
         } p-4 rounded-3xl flex flex-wrap max-w-sm`}
       >
         {content}

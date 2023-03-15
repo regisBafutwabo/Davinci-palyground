@@ -6,7 +6,7 @@ export type ChatMessageDto = {
   id: string;
   createdAt: number;
   content: string;
-  authorName: 'me' | 'Therapist';
+  authorName: 'user' | 'assistant';
 };
 
 export type User = { firstName: string; id: string };

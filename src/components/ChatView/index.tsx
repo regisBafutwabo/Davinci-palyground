@@ -12,9 +12,9 @@ import { Message } from './components/Message';
 const chatOnInitialize: ChatDto = {
   messages: [
     {
-      authorName: 'Therapist',
+      authorName: 'assistant',
       id: uuidv4(),
-      content: 'Hello! How are you?',
+      content: 'Hello! How are you ? ',
       createdAt: Date.now(),
     },
   ],
@@ -46,7 +46,7 @@ export const ChatView = () => {
     try {
       setLoading(true);
       const newMessage: ChatMessageDto = {
-        authorName: 'me',
+        authorName: 'user',
         createdAt: Date.now(),
         id: crypto.randomUUID(),
         content: message,
@@ -80,7 +80,7 @@ export const ChatView = () => {
           <textarea
             rows={2}
             placeholder="type your message here..."
-            className="rounded p-4 w-[660px] :focus-visble outline-none resize-none"
+            className="rounded p-4 w-full :focus-visble outline-none resize-none"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
